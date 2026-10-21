@@ -12,19 +12,35 @@ class SectionHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(20, 24, 12, 8),
+      padding: const EdgeInsets.fromLTRB(20, 24, 12, 10),
       child: Row(
         children: [
-          Expanded(child: Text(title, style: Theme.of(context).textTheme.titleMedium)),
+          Expanded(
+            child: Text(
+              title,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: const Color(0xFF1E293B),
+                    letterSpacing: -0.2,
+                  ),
+            ),
+          ),
           if (action != null)
-            TextButton(onPressed: onAction, child: Text(action!)),
+            TextButton(
+              onPressed: onAction,
+              style: TextButton.styleFrom(
+                foregroundColor: AppColors.primary,
+                visualDensity: VisualDensity.compact,
+              ),
+              child: Text(action!),
+            ),
         ],
       ),
     );
   }
 }
 
-/// Square icon tile used in the quick-access grid.
+/// Modern square icon tile used in the quick-access grid.
 class QuickActionTile extends StatelessWidget {
   const QuickActionTile({
     super.key,
@@ -32,38 +48,81 @@ class QuickActionTile extends StatelessWidget {
     required this.label,
     required this.onTap,
     this.highlight = false,
+    this.gradient,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
   final bool highlight;
+  final LinearGradient? gradient;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(16),
-      onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 56,
-            height: 56,
-            decoration: BoxDecoration(
-              color: highlight ? AppColors.primary : AppColors.tint,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Icon(icon, color: highlight ? AppColors.white : AppColors.primary),
+    final effectiveGradient = gradient ??
+        (highlight
+            ? const LinearGradient(
+                colors: [Color(0xFFF15921), Color(0xFFE64A19)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              )
+            : const LinearGradient(
+                colors: [Color(0xFFFFF2EE), Color(0xFFFFECE5)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ));
+
+    final isColored = gradient != null || highlight;
+
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2, vertical: 4),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 58,
+                height: 58,
+                decoration: BoxDecoration(
+                  gradient: effectiveGradient,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: (isColored
+                              ? (gradient?.colors.first ?? const Color(0xFFF15921))
+                              : Colors.black)
+                          .withValues(alpha: isColored ? 0.28 : 0.05),
+                      blurRadius: isColored ? 8 : 4,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Icon(
+                  icon,
+                  color: isColored ? Colors.white : AppColors.primary,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(height: 7),
+              Text(
+                label,
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11.5,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFF1E293B),
+                  height: 1.15,
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
-          Text(
-            label,
-            textAlign: TextAlign.center,
-            maxLines: 2,
-            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w500),
-          ),
-        ],
+        ),
       ),
     );
   }

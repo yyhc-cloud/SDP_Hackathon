@@ -16,6 +16,24 @@ class UserProfile {
   final int streakDays;
   final String guild;
   final bool isLanded;
+
+  UserProfile copyWith({
+    String? name,
+    String? residence,
+    int? points,
+    int? streakDays,
+    String? guild,
+    bool? isLanded,
+  }) {
+    return UserProfile(
+      name: name ?? this.name,
+      residence: residence ?? this.residence,
+      points: points ?? this.points,
+      streakDays: streakDays ?? this.streakDays,
+      guild: guild ?? this.guild,
+      isLanded: isLanded ?? this.isLanded,
+    );
+  }
 }
 
 class PointsActivity {
@@ -101,3 +119,4 @@ class MockData {
     Announcement('Tip', 'Rinse before you recycle', 'Clean items earn full points'),
   ];
 }
+

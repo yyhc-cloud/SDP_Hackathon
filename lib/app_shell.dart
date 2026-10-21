@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import 'screens/community_screen.dart';
+import 'screens/biodiversity_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/profile_screen.dart';
+import 'screens/map_screen.dart';
 import 'screens/rewards_screen.dart';
-import 'screens/scan_screen.dart';
+import 'screens/show_qr_screen.dart';
 import 'theme/app_colors.dart';
 
-/// Bottom-tab shell: Home · Rewards · [Scan] · Community · Profile.
+/// Bottom-tab shell: Home · Township Map · [Scan FAB] · Sanctuary & AR · Circular Shop.
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
 
@@ -21,17 +21,17 @@ class _AppShellState extends State<AppShell> {
   void _goTo(int index) => setState(() => _index = index);
 
   void _openScanner() {
-    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ScanScreen()));
+    Navigator.of(context).push(MaterialPageRoute(builder: (_) => const ShowQrScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
     final pages = [
       HomeScreen(onNavigate: _goTo),
-      const RewardsScreen(),
+      const TownshipMapScreen(),
       const SizedBox.shrink(), // slot under the centre scan button
-      const CommunityScreen(),
-      const ProfileScreen(),
+      const BiodiversityScreen(),
+      const RewardsScreen(),
     ];
 
     return Scaffold(
@@ -42,8 +42,8 @@ class _AppShellState extends State<AppShell> {
         backgroundColor: AppColors.primary,
         foregroundColor: AppColors.white,
         shape: const CircleBorder(),
-        tooltip: 'Scan waste',
-        child: const Icon(Icons.qr_code_scanner_rounded),
+        tooltip: 'Show Resident QR at smart bin',
+        child: const Icon(Icons.qr_code_2_rounded),
       ),
       bottomNavigationBar: NavigationBar(
         selectedIndex: _index,
@@ -55,20 +55,20 @@ class _AppShellState extends State<AppShell> {
             label: 'Home',
           ),
           NavigationDestination(
-            icon: Icon(Icons.stars_outlined),
-            selectedIcon: Icon(Icons.stars_rounded),
-            label: 'Rewards',
+            icon: Icon(Icons.map_outlined),
+            selectedIcon: Icon(Icons.map_rounded),
+            label: 'Township Map',
           ),
-          NavigationDestination(icon: SizedBox.shrink(), label: 'Scan'),
+          NavigationDestination(icon: SizedBox.shrink(), label: 'Show QR'),
           NavigationDestination(
-            icon: Icon(Icons.emoji_events_outlined),
-            selectedIcon: Icon(Icons.emoji_events_rounded),
-            label: 'Community',
+            icon: Icon(Icons.pets_outlined),
+            selectedIcon: Icon(Icons.pets_rounded),
+            label: 'Sanctuary',
           ),
           NavigationDestination(
-            icon: Icon(Icons.person_outline_rounded),
-            selectedIcon: Icon(Icons.person_rounded),
-            label: 'Profile',
+            icon: Icon(Icons.storefront_outlined),
+            selectedIcon: Icon(Icons.storefront_rounded),
+            label: 'Circular Shop',
           ),
         ],
       ),
