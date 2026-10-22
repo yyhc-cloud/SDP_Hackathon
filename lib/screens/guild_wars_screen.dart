@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/township_state.dart';
 import '../models/landed_models.dart';
 import '../theme/app_colors.dart';
+import '../widgets/common.dart';
 
 class GuildWarsScreen extends StatefulWidget {
   const GuildWarsScreen({super.key});
@@ -27,7 +28,7 @@ class _GuildWarsScreenState extends State<GuildWarsScreen> with SingleTickerProv
 
   void _reinforceFront(GuildBattlefront bf) {
     TownshipState.instance.contributeToBattlefront(bf.id, 50);
-    ScaffoldMessenger.of(context).showSnackBar(
+    ScaffoldMessenger.of(context).showLatestSnackBar(
       SnackBar(
         content: Text('🛡️ Reinforced ${bf.name} with +50 War Power! (+10 Green Points earned)'),
         backgroundColor: const Color(0xFF1B5E20),

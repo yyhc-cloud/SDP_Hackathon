@@ -112,6 +112,8 @@ class AppTheme {
         dividerColor: AppColors.divider,
       ),
       dividerTheme: const DividerThemeData(color: AppColors.divider, space: 1),
+      // Floating snackbars sit above the docked Show QR button instead of pushing it upwards.
+      snackBarTheme: const SnackBarThemeData(behavior: SnackBarBehavior.floating),
     );
   }
 }

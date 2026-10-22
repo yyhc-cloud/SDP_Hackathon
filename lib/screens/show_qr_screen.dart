@@ -344,7 +344,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
           ),
           const SizedBox(height: 16),
 
-          // Instructions Card
+          // Instructions Card (follows the Walked / Collector Buggy switch above)
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
@@ -352,18 +352,35 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
               borderRadius: BorderRadius.circular(16),
               border: Border.all(color: Colors.grey.shade200),
             ),
-            child: const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('How to Use at Smart Bins', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
-                SizedBox(height: 6),
-                Text('1. Hold this QR code 10cm from the Smart Bin optical lens.', style: TextStyle(fontSize: 11, color: Colors.black87)),
-                SizedBox(height: 3),
-                Text('2. Smart Bin recognizes your household and unlocks the designated chute.', style: TextStyle(fontSize: 11, color: Colors.black87)),
-                SizedBox(height: 3),
-                Text('3. Drop your waste. Scale verifies weight and credits 2x points instantly!', style: TextStyle(fontSize: 11, color: Colors.black87)),
-              ],
-            ),
+            child: _isWalkedSelfDrop
+                ? const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('How to Use at Smart Bins', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+                      SizedBox(height: 6),
+                      Text('1. Hold this QR code 10cm from the Smart Bin optical lens.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 3),
+                      Text('2. Smart Bin recognizes your household and unlocks the designated chute.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 3),
+                      Text('3. Drop your waste. Scale verifies weight and credits 2x points instantly!', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                    ],
+                  )
+                : const Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('How to Use for Collector Buggy', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+                      SizedBox(height: 6),
+                      Text('1. Summon the buggy from the Pickup page, then leave your sorted, bagged recyclables at your gate.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 3),
+                      Text('2. When the buggy arrives, show this QR code to the Collector Buggy operator.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 3),
+                      Text('3. The operator scans your QR and the AI Scanner checks that your bag is sorted correctly.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 3),
+                      Text('4. Your bag is weighed on the buggy scale and points are credited to you at the standard 1x rate.', style: TextStyle(fontSize: 11, color: Colors.black87)),
+                      SizedBox(height: 6),
+                      Text('Tip: walk to a Smart Bin instead to earn 2x points!', style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: Color(0xFFE65100))),
+                    ],
+                  ),
           ),
           const SizedBox(height: 16),
 

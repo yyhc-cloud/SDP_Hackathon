@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../models/landed_models.dart';
@@ -268,6 +269,40 @@ class TownshipState extends ChangeNotifier {
   );
   CommunityBoss get boss => _boss;
 
+  // Raid boss respawn cooldown after a defeat (shared by the raid arena and the home banner)
+  static const Duration bossRespawnCooldown = Duration(minutes: 1);
+  DateTime? _bossRespawnAt;
+  Timer? _bossRespawnTimer;
+
+  bool get isBossOnCooldown => _bossRespawnAt != null;
+
+  /// Time left until the boss respawns, or [Duration.zero] when it is not on cooldown.
+  Duration get bossRespawnRemaining {
+    final at = _bossRespawnAt;
+    if (at == null) return Duration.zero;
+    final left = at.difference(DateTime.now());
+    return left.isNegative ? Duration.zero : left;
+  }
+
+  void _onBossDefeated() {
+    unlockGuardianDog();
+    if (_bossRespawnAt != null) return;
+    _bossRespawnAt = DateTime.now().add(bossRespawnCooldown);
+    _bossRespawnTimer?.cancel();
+    _bossRespawnTimer = Timer.periodic(const Duration(seconds: 1), (_) {
+      if (bossRespawnRemaining == Duration.zero) _respawnBoss();
+      notifyListeners();
+    });
+  }
+
+  void _respawnBoss() {
+    _bossRespawnTimer?.cancel();
+    _bossRespawnTimer = null;
+    _bossRespawnAt = null;
+    _boss.bossCurrentHp = _boss.bossMaxHp;
+    _boss.currentKg = 0;
+  }
+
   // Guild Wars: Neighbourhood vs Neighbourhood Rivalries
   final List<NeighbourhoodGuild> _neighbourhoodGuilds = [
     const NeighbourhoodGuild(
@@ -527,8 +562,8 @@ class TownshipState extends ChangeNotifier {
       fillPercentage: 68,
       acceptedMaterials: ['Glass', 'Plastics', 'Organic Food Waste'],
       distanceMeters: 310,
-      xRatio: 0.28,
-      yRatio: 0.62,
+      xRatio: 0.06,
+      yRatio: 0.68,
     ),
     const SmartBinLocation(
       id: 'bin_3',
@@ -854,15 +889,16 @@ class TownshipState extends ChangeNotifier {
 
   /// Interactive Eco-Battle Attack on Sludge-Hog
   int attackBossWithCompanion(PokemonMove move) {
+    if (isBossOnCooldown) return 0;
     final damage = move.calculateDamage();
     _boss.bossCurrentHp = math.max(0, _boss.bossCurrentHp - damage);
     _boss.currentKg = math.min(_boss.targetKg, _boss.currentKg + (damage / 10.0));
 
     _user = _user.copyWith(points: _user.points + 15);
 
-    // If Sludge-Hog defeated, give Forest Guardian Dog!
+    // If Sludge-Hog defeated, give Forest Guardian Dog and start the respawn cooldown!
     if (_boss.isDefeated) {
-      unlockGuardianDog();
+      _onBossDefeated();
     }
 
     notifyListeners();
@@ -1001,12 +1037,14 @@ class TownshipState extends ChangeNotifier {
       logWalkingDistance(0.35);
     }
 
-    _boss.currentKg = (_boss.currentKg + weightKg).clamp(0.0, _boss.targetKg);
-    _boss.bossCurrentHp = math.max(0, _boss.bossCurrentHp - (weightKg * 20).round());
-    _boss.participantsCount += 1;
+    if (!isBossOnCooldown) {
+      _boss.currentKg = (_boss.currentKg + weightKg).clamp(0.0, _boss.targetKg);
+      _boss.bossCurrentHp = math.max(0, _boss.bossCurrentHp - (weightKg * 20).round());
+      _boss.participantsCount += 1;
 
-    if (_boss.isDefeated) {
-      unlockGuardianDog();
+      if (_boss.isDefeated) {
+        _onBossDefeated();
+      }
     }
 
     if (_eggs.where((e) => !e.isHatched).length < 3) {

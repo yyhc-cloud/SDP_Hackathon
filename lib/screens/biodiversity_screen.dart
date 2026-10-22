@@ -3,6 +3,7 @@ import '../data/township_state.dart';
 import '../models/pokemon_model.dart';
 import '../services/poke_api_service.dart';
 import '../theme/app_colors.dart';
+import '../widgets/common.dart';
 import '../widgets/cube_pet_image.dart';
 
 class BiodiversityScreen extends StatefulWidget {
@@ -185,7 +186,7 @@ class _ArCompanionTabState extends State<_ArCompanionTab> {
             onPressed: () {
               Navigator.of(ctx).pop();
               widget.state.declineEvolution(companion);
-              ScaffoldMessenger.of(context).showSnackBar(
+              ScaffoldMessenger.of(context).showLatestSnackBar(
                 SnackBar(
                   content: Text('Kept ${companion.displayName} in current form! You can evolve it anytime from the Evolution Tree.'),
                 ),
@@ -277,7 +278,7 @@ class _ArCompanionTabState extends State<_ArCompanionTab> {
           state: widget.state,
           onSelected: (p) {
             widget.state.setActiveCompanion(p);
-            ScaffoldMessenger.of(context).showSnackBar(
+            ScaffoldMessenger.of(context).showLatestSnackBar(
               SnackBar(content: Text('Switched active companion to ${p.displayName}!')),
             );
           },
@@ -940,7 +941,7 @@ class _EggIncubatorTab extends StatelessWidget {
     if (newlyHatched != null) {
       _showHatchDialog(context, newlyHatched);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context).showLatestSnackBar(
         const SnackBar(content: Text('🚶 Walked +0.65 km in Bandar Bukit Raja! Incubator updated.')),
       );
     }
@@ -1438,7 +1439,7 @@ class _PokedexGrid extends StatelessWidget {
                                   onPressed: () {
                                     state.declineEvolution(pokemon);
                                     Navigator.of(ctx).pop();
-                                    ScaffoldMessenger.of(context).showSnackBar(
+                                    ScaffoldMessenger.of(context).showLatestSnackBar(
                                       SnackBar(content: Text('Kept ${pokemon.displayName} in current form!')),
                                     );
                                   },
@@ -1453,7 +1454,7 @@ class _PokedexGrid extends StatelessWidget {
                                     final messenger = ScaffoldMessenger.of(context);
                                     Navigator.of(ctx).pop();
                                     await state.evolvePokemon(pokemon);
-                                    messenger.showSnackBar(
+                                    messenger.showLatestSnackBar(
                                       SnackBar(content: Text('🎉 ${pokemon.displayName} evolved into ${pokemon.evolvesToName}!')),
                                     );
                                   },
@@ -1479,7 +1480,7 @@ class _PokedexGrid extends StatelessWidget {
                           : () {
                               state.setActiveCompanion(pokemon);
                               Navigator.of(ctx).pop();
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              ScaffoldMessenger.of(context).showLatestSnackBar(
                                 SnackBar(content: Text('Switched active companion to ${pokemon.displayName}! 👑')),
                               );
                             },

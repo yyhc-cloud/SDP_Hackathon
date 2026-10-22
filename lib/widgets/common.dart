@@ -165,3 +165,20 @@ String formatPoints(int points) {
   }
   return buf.toString();
 }
+
+extension LatestSnackBar on ScaffoldMessengerState {
+  /// Shows [snackBar] in place of any visible or queued snackbars, so rapid taps
+  /// (e.g. switching pets quickly) don't leave a backlog of stale notifications.
+  void showLatestSnackBar(SnackBar snackBar) {
+    // clearSnackBars() drops the queue but animates the visible one out first; remove it immediately instead.
+    clearSnackBars();
+    removeCurrentSnackBar();
+    showSnackBar(snackBar);
+  }
+}
+
+/// Formats a countdown as m:ss, e.g. 0:42.
+String formatCountdown(Duration d) {
+  final seconds = d.inSeconds.remainder(60).toString().padLeft(2, '0');
+  return '${d.inMinutes}:$seconds';
+}

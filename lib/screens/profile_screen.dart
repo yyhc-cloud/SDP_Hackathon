@@ -25,7 +25,7 @@ class ProfileScreen extends StatelessWidget {
                 icon: const Icon(Icons.share_outlined),
                 tooltip: 'Share Eco Profile',
                 onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
+                  ScaffoldMessenger.of(context).showLatestSnackBar(
                     const SnackBar(content: Text('Eco Profile link copied to clipboard!')),
                   );
                 },

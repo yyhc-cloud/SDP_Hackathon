@@ -290,12 +290,14 @@ class _PerkRedeemSheet extends StatelessWidget {
               width: double.infinity,
               child: FilledButton(
                 onPressed: () {
+                  // Capture the navigator before popping: this sheet's context is gone once it closes.
+                  final navigator = Navigator.of(context);
                   final ok = state.redeemCircularPerk(perk.id);
-                  Navigator.of(context).pop();
+                  navigator.pop();
                   if (ok) {
                     showDialog<void>(
-                      context: context,
-                      builder: (_) => AlertDialog(
+                      context: navigator.context,
+                      builder: (dialogContext) => AlertDialog(
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
                         title: const Text('🎉 Voucher Redeemed!'),
                         content: Column(
@@ -317,7 +319,7 @@ class _PerkRedeemSheet extends StatelessWidget {
                           ],
                         ),
                         actions: [
-                          TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Done')),
+                          TextButton(onPressed: () => Navigator.of(dialogContext).pop(), child: const Text('Done')),
                         ],
                       ),
                     );

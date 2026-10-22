@@ -248,47 +248,74 @@ class HomeScreen extends StatelessWidget {
                             children: [
                               Row(
                                 children: [
-                                  const Text(
-                                    'RAID BOSS: Sludge-Hog in Park',
-                                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13),
+                                  const Expanded(
+                                    child: Text(
+                                      'RAID BOSS: Sludge-Hog in Park',
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 13),
+                                    ),
                                   ),
-                                  const Spacer(),
+                                  const SizedBox(width: 6),
                                   Container(
                                     padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
-                                    decoration: BoxDecoration(color: Colors.amber, borderRadius: BorderRadius.circular(6)),
+                                    decoration: BoxDecoration(
+                                      color: state.isBossOnCooldown ? Colors.green.shade600 : Colors.amber,
+                                      borderRadius: BorderRadius.circular(6),
+                                    ),
                                     child: Text(
-                                      '${boss.daysRemaining}d left',
-                                      style: const TextStyle(fontSize: 9, fontWeight: FontWeight.w900, color: Colors.black),
+                                      state.isBossOnCooldown ? 'PURIFIED' : '${boss.daysRemaining}d left',
+                                      style: TextStyle(
+                                        fontSize: 9,
+                                        fontWeight: FontWeight.w900,
+                                        color: state.isBossOnCooldown ? Colors.white : Colors.black,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
                               const SizedBox(height: 3),
-                              const Text(
-                                'Defeat to win Forest Guardian Dog (New Pet!)',
-                                style: TextStyle(color: Colors.amberAccent, fontSize: 11, fontWeight: FontWeight.w700),
-                              ),
-                              const SizedBox(height: 4),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(4),
-                                      child: LinearProgressIndicator(
-                                        value: (boss.currentKg / boss.targetKg).clamp(0.0, 1.0),
-                                        minHeight: 4,
-                                        backgroundColor: Colors.white24,
-                                        color: Colors.amber,
+                              if (state.isBossOnCooldown)
+                                Row(
+                                  children: [
+                                    const Icon(Icons.timer_outlined, color: Colors.amberAccent, size: 14),
+                                    const SizedBox(width: 4),
+                                    Text(
+                                      'Respawns in ${formatCountdown(state.bossRespawnRemaining)}',
+                                      style: const TextStyle(
+                                        color: Colors.amberAccent,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w800,
+                                        fontFeatures: [FontFeature.tabularFigures()],
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Text(
-                                    '${boss.currentKg.toStringAsFixed(1)} / ${boss.targetKg.toInt()} kg',
-                                    style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w600),
-                                  ),
-                                ],
-                              ),
+                                  ],
+                                )
+                              else ...[
+                                const Text(
+                                  'Defeat to win Forest Guardian Dog (New Pet!)',
+                                  style: TextStyle(color: Colors.amberAccent, fontSize: 11, fontWeight: FontWeight.w700),
+                                ),
+                                const SizedBox(height: 4),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(4),
+                                        child: LinearProgressIndicator(
+                                          value: (boss.currentKg / boss.targetKg).clamp(0.0, 1.0),
+                                          minHeight: 4,
+                                          backgroundColor: Colors.white24,
+                                          color: Colors.amber,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Text(
+                                      '${boss.currentKg.toStringAsFixed(1)} / ${boss.targetKg.toInt()} kg',
+                                      style: const TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.w600),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ],
                           ),
                         ),
@@ -420,7 +447,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                     QuickActionTile(
                       icon: Icons.campaign_rounded,
-                      label: 'Report in General',
+                      label: 'Report Issue',
                       gradient: const LinearGradient(
                         colors: [Color(0xFFFB923C), Color(0xFFEA580C)],
                         begin: Alignment.topLeft,

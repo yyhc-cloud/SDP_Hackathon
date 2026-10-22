@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../data/township_state.dart';
 import '../models/landed_models.dart';
 import '../theme/app_colors.dart';
+import '../widgets/common.dart';
 import 'scan_screen.dart';
 
 /// Active Mobility: Self-Drop vs. Buggy Pickup Choice & Alternative Egg Hatching
@@ -72,8 +73,10 @@ class PickupRequestScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    const Text('Self-Drop (Walk / Cycle)', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                                    const Spacer(),
+                                    Expanded(
+                                      child: Text('Self-Drop (Walk / Cycle)', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                                    ),
+                                    const SizedBox(width: 6),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                       decoration: BoxDecoration(
@@ -152,8 +155,10 @@ class PickupRequestScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    const Text('Collector Buggy (At Gate)', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                                    const Spacer(),
+                                    Expanded(
+                                      child: Text('Collector Buggy (At Gate)', style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
+                                    ),
+                                    const SizedBox(width: 6),
                                     Container(
                                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                       decoration: BoxDecoration(
@@ -246,7 +251,7 @@ class PickupRequestScreen extends StatelessWidget {
                               child: FilledButton.icon(
                                 onPressed: () {
                                   state.summonBuggyToGate();
-                                  ScaffoldMessenger.of(context).showSnackBar(
+                                  ScaffoldMessenger.of(context).showLatestSnackBar(
                                     const SnackBar(content: Text('🚗 Collector Buggy dispatched to your gate! ETA: 4 mins')),
                                   );
                                 },
@@ -326,10 +331,14 @@ class PickupRequestScreen extends StatelessWidget {
                           ),
                         ),
                         FilledButton.tonal(
-                          style: FilledButton.styleFrom(visualDensity: VisualDensity.compact),
+                          // Theme minimumSize is full-width; override it so the button fits inside this Row.
+                          style: FilledButton.styleFrom(
+                            visualDensity: VisualDensity.compact,
+                            minimumSize: const Size(0, 40),
+                          ),
                           onPressed: () {
                             final newlyHatched = state.syncTownshipParkSteps(1500);
-                            ScaffoldMessenger.of(context).showSnackBar(
+                            ScaffoldMessenger.of(context).showLatestSnackBar(
                               SnackBar(
                                 content: Text(newlyHatched != null
                                     ? '🎉 Park steps hatched your ${newlyHatched.pokemonName}!'

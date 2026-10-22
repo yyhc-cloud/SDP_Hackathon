@@ -70,7 +70,7 @@ class _ReportScreenState extends State<ReportScreen> {
     final ticketNum = 'SDP-${DateTime.now().year}-${1000 + math.Random().nextInt(9000)}';
     
     // Reward civic points
-    TownshipState.instance.addPoints(20, 'Report in General: $ticketNum ($_selectedIssue)');
+    TownshipState.instance.addPoints(20, 'Report Issue: $ticketNum ($_selectedIssue)');
 
     showDialog<void>(
       context: context,
@@ -133,7 +133,7 @@ class _ReportScreenState extends State<ReportScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FA),
       appBar: AppBar(
-        title: const Text('Report in General'),
+        title: const Text('Report Issue'),
         backgroundColor: const Color(0xFF1B5E20),
         foregroundColor: Colors.white,
       ),
@@ -167,35 +167,32 @@ class _ReportScreenState extends State<ReportScreen> {
           // Category Selector Chips
           const Text('Category', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
           const SizedBox(height: 8),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: _categoryIssues.keys.map((cat) {
-                final isSelected = _selectedCategory == cat;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: FilterChip(
-                    label: Text(cat),
-                    selected: isSelected,
-                    selectedColor: const Color(0xFF1B5E20),
-                    labelStyle: TextStyle(
-                      color: isSelected ? Colors.white : Colors.black87,
-                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                      fontSize: 12,
-                    ),
-                    checkmarkColor: Colors.white,
-                    onSelected: (val) {
-                      if (val) {
-                        setState(() {
-                          _selectedCategory = cat;
-                          _selectedIssue = _categoryIssues[cat]!.first;
-                        });
-                      }
-                    },
-                  ),
-                );
-              }).toList(),
-            ),
+          // Wrap so every category is visible at once — no horizontal scrolling.
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: _categoryIssues.keys.map((cat) {
+              final isSelected = _selectedCategory == cat;
+              return FilterChip(
+                label: Text(cat),
+                selected: isSelected,
+                selectedColor: const Color(0xFF1B5E20),
+                labelStyle: TextStyle(
+                  color: isSelected ? Colors.white : Colors.black87,
+                  fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                  fontSize: 12,
+                ),
+                checkmarkColor: Colors.white,
+                onSelected: (val) {
+                  if (val) {
+                    setState(() {
+                      _selectedCategory = cat;
+                      _selectedIssue = _categoryIssues[cat]!.first;
+                    });
+                  }
+                },
+              );
+            }).toList(),
           ),
           const SizedBox(height: 18),
 
