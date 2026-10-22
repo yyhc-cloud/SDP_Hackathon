@@ -1055,9 +1055,12 @@ class _EggCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(egg.name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                      Expanded(
+                        child: Text(egg.name, style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                      ),
+                      const SizedBox(width: 8),
                       Text(
                         egg.isHatched ? 'Hatched! ✅' : '${egg.walkedKm.toStringAsFixed(1)} / ${egg.targetKm.toInt()} km',
                         style: TextStyle(fontSize: 11, fontWeight: FontWeight.w700, color: egg.eggType.color),
