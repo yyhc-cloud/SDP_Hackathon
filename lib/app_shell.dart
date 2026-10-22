@@ -57,7 +57,7 @@ class _AppShellState extends State<AppShell> {
           NavigationDestination(
             icon: Icon(Icons.map_outlined),
             selectedIcon: Icon(Icons.map_rounded),
-            label: 'Township Map',
+            label: 'Map',
           ),
           NavigationDestination(icon: SizedBox.shrink(), label: 'Show QR'),
           NavigationDestination(

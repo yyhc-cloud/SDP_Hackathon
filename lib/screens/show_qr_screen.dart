@@ -382,70 +382,73 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
                     ],
                   ),
           ),
-          const SizedBox(height: 16),
+          // Smart Bin deposit simulator only applies to walked self-drop; buggy mode uses the operator's scan.
+          if (_isWalkedSelfDrop) ...[
+            const SizedBox(height: 16),
 
-          // Demo / Quick Deposit Simulator
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(20),
-              border: Border.all(color: const Color(0xFF81C784)),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Row(
-                  children: [
-                    Icon(Icons.touch_app_rounded, color: Color(0xFF1B5E20), size: 18),
-                    SizedBox(width: 8),
-                    Text('Select Recyclable to Deposit', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: _wasteOptions.map((opt) {
-                      final isSel = _selectedWaste.name == opt.name;
-                      return Padding(
-                        padding: const EdgeInsets.only(right: 8),
-                        child: ChoiceChip(
-                          avatar: CubePetImage(imagePath: opt.petAsset, width: 20, height: 20),
-                          label: Text(opt.name.split(' ').take(2).join(' ')),
-                          selected: isSel,
-                          selectedColor: opt.ecoType.color.withValues(alpha: 0.2),
-                          labelStyle: TextStyle(
-                            fontWeight: isSel ? FontWeight.w800 : FontWeight.w500,
-                            color: isSel ? opt.ecoType.color : Colors.black87,
-                            fontSize: 11,
+            // Demo / Quick Deposit Simulator
+            Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20),
+                border: Border.all(color: const Color(0xFF81C784)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Row(
+                    children: [
+                      Icon(Icons.touch_app_rounded, color: Color(0xFF1B5E20), size: 18),
+                      SizedBox(width: 8),
+                      Text('Select Recyclable to Deposit', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 13)),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: _wasteOptions.map((opt) {
+                        final isSel = _selectedWaste.name == opt.name;
+                        return Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ChoiceChip(
+                            avatar: CubePetImage(imagePath: opt.petAsset, width: 20, height: 20),
+                            label: Text(opt.name.split(' ').take(2).join(' ')),
+                            selected: isSel,
+                            selectedColor: opt.ecoType.color.withValues(alpha: 0.2),
+                            labelStyle: TextStyle(
+                              fontWeight: isSel ? FontWeight.w800 : FontWeight.w500,
+                              color: isSel ? opt.ecoType.color : Colors.black87,
+                              fontSize: 11,
+                            ),
+                            onSelected: (val) {
+                              if (val) setState(() => _selectedWaste = opt);
+                            },
                           ),
-                          onSelected: (val) {
-                            if (val) setState(() => _selectedWaste = opt);
-                          },
-                        ),
-                      );
-                    }).toList(),
-                  ),
-                ),
-                const SizedBox(height: 14),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF1B5E20),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      padding: const EdgeInsets.symmetric(vertical: 13),
+                        );
+                      }).toList(),
                     ),
-                    icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
-                    label: const Text('Scan & Deposit at Smart Bin', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
-                    onPressed: _simulateDeposit,
                   ),
-                ),
-              ],
+                  const SizedBox(height: 14),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF1B5E20),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.symmetric(vertical: 13),
+                      ),
+                      icon: const Icon(Icons.qr_code_scanner_rounded, size: 20),
+                      label: const Text('Scan & Deposit at Smart Bin', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 14)),
+                      onPressed: _simulateDeposit,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
