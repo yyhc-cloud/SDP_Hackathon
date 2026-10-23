@@ -133,7 +133,7 @@ class _ReportScreenState extends State<ReportScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF7F9FA),
       appBar: AppBar(
-        title: const Text('Report Issue'),
+        title: const Text('Report Issue', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF1B5E20),
         foregroundColor: Colors.white,
       ),

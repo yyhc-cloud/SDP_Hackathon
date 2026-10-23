@@ -171,7 +171,7 @@ class _ShowQrScreenState extends State<ShowQrScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFFF6F8F9),
       appBar: AppBar(
-        title: const Text('Resident Eco-QR'),
+        title: const Text('Resident Eco-QR', style: TextStyle(color: Colors.white)),
         backgroundColor: const Color(0xFF1B5E20),
         foregroundColor: Colors.white,
       ),
